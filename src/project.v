@@ -44,18 +44,15 @@ module tt_um_riscv_processor (
 
     assign imem_rdata = instruction;
 
-// Internal data RAM: 32 words
-reg [31:0] data_mem [0:31];
+// Single-word data memory for demonstration
+reg [31:0] data_word;
 
-// Data memory read
-assign dmem_rdata = data_mem[dmem_addr[6:2]];
+assign dmem_rdata = (dmem_addr == 32'd96) ? data_word : 32'd0;
 
-// Data memory write
 always @(posedge clk) begin
-    if (dmem_we && !rst)
-        data_mem[dmem_addr[6:2]] <= dmem_wdata;
+    if (dmem_we && !rst && dmem_addr == 32'd96)
+        data_word <= dmem_wdata;
 end
-
     // RISC-V processor
     rv32i_top processor (
         .clk(clk),
