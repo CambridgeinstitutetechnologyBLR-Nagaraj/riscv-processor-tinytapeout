@@ -44,17 +44,17 @@ module tt_um_riscv_processor (
 
     assign imem_rdata = instruction;
 
-    // Internal data RAM: 256 words
-    reg [31:0] data_mem [0:255];
+// Internal data RAM: 32 words
+reg [31:0] data_mem [0:31];
 
-    // Data memory read
-    assign dmem_rdata = data_mem[dmem_addr[9:2]];
+// Data memory read
+assign dmem_rdata = data_mem[dmem_addr[6:2]];
 
-    // Data memory write
-    always @(posedge clk) begin
-        if (dmem_we && !rst)
-            data_mem[dmem_addr[9:2]] <= dmem_wdata;
-    end
+// Data memory write
+always @(posedge clk) begin
+    if (dmem_we && !rst)
+        data_mem[dmem_addr[6:2]] <= dmem_wdata;
+end
 
     // RISC-V processor
     rv32i_top processor (
